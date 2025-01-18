@@ -55,7 +55,8 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
 
         var update = GetUpdateDefinitionForTaskList(updateBuilder, taskList);
         var filter = filterBuilder.Eq(x => x.Id, taskList.Id) &
-                     filterBuilder.Eq(x => x.OwnerId, userId);
+                     (filterBuilder.Eq(x => x.OwnerId, userId) |
+                      filterBuilder.AnyEq(x => x.AccessibleUserIds, userId));
 
         var options = new FindOneAndUpdateOptions<TaskList>
         {
