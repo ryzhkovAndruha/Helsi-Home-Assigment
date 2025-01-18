@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace HelsiTestAssessment.Controllers
+namespace HelsiTestAssessment.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TaskListController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TaskListController : ControllerBase
-    {
 
-    }
 }

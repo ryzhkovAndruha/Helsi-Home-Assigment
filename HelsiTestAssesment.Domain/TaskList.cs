@@ -1,8 +1,14 @@
-﻿namespace HelsiTestAssesment.Domain;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace HelsiTestAssesment.Domain;
 
 public class TaskList
 {
-    public string Id { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    [BsonIgnoreIfDefault]
+    public string Id { get; set; } = default!;
 
     public string Name { get; set; } = default!;
 
