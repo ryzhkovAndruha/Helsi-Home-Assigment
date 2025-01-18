@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelsiTestAssessment", "HelsiTestAssessment\HelsiTestAssessment.csproj", "{C0B47FF4-36A1-4909-A7D2-91FF4A16C886}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelsiTestAssesment.Application", "HelsiTestAssesment.Application\HelsiTestAssesment.Application.csproj", "{D7B4C94B-CF82-4368-A911-ECFE8B682AA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelsiTestAssesment.Domain", "HelsiTestAssesment.Domain\HelsiTestAssesment.Domain.csproj", "{08B86469-377D-4D8E-860C-D816CDF48139}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelsiTestAssesment.Infrastucture", "HelsiTestAssesment.Infrastucture\HelsiTestAssesment.Infrastucture.csproj", "{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0B47FF4-36A1-4909-A7D2-91FF4A16C886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0B47FF4-36A1-4909-A7D2-91FF4A16C886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0B47FF4-36A1-4909-A7D2-91FF4A16C886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0B47FF4-36A1-4909-A7D2-91FF4A16C886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7B4C94B-CF82-4368-A911-ECFE8B682AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7B4C94B-CF82-4368-A911-ECFE8B682AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7B4C94B-CF82-4368-A911-ECFE8B682AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7B4C94B-CF82-4368-A911-ECFE8B682AA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08B86469-377D-4D8E-860C-D816CDF48139}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08B86469-377D-4D8E-860C-D816CDF48139}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08B86469-377D-4D8E-860C-D816CDF48139}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08B86469-377D-4D8E-860C-D816CDF48139}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
