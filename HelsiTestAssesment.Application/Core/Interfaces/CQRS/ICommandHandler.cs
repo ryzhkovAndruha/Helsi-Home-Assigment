@@ -1,4 +1,4 @@
-﻿namespace HelsiTestAssesment.Application.Core.Interfaces;
+﻿namespace HelsiTestAssesment.Application.Core.Interfaces.CQRS;
 
 public interface ICommandHandler<TCommand> where TCommand : ICommand
 {

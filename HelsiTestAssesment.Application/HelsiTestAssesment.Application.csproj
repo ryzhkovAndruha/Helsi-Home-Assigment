@@ -11,4 +11,8 @@
     <Folder Include="Handlers\Queries\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HelsiTestAssesment.Domain\HelsiTestAssesment.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
