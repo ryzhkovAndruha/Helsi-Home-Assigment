@@ -7,7 +7,7 @@ public class AddUserToTaskListCommandHandler(ITaskListRepository taskListReposit
 {
     public async Task Handle(AddUserToTaskListCommand command, CancellationToken cancellationToken)
     {
-        await taskListRepository.AddUserToTaskListAsync(command.AddUserToTaskListDto.TaskListId, 
-            command.AddUserToTaskListDto.UserToAdd, command.UserId, cancellationToken);
+        await taskListRepository.AddUserToTaskListAsync(command.TaskListId, 
+            command.UserToAdd, command.UserId, cancellationToken);
     }
 }

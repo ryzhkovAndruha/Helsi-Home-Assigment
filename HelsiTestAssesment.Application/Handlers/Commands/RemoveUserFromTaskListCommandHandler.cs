@@ -7,7 +7,7 @@ internal class RemoveUserFromTaskListCommandHandler(ITaskListRepository taskList
 {
     public async Task Handle(RemoveUserFromTaskListCommand command, CancellationToken cancellationToken)
     {
-        await taskListRepository.RemoveUserFromTaskListAsync(command.RemoveTaskListUserDto.TaskListId,
-            command.RemoveTaskListUserDto.UserToAdd, command.UserId, cancellationToken);
+        await taskListRepository.RemoveUserFromTaskListAsync(command.TaskListId,
+            command.UserToAdd, command.UserId, cancellationToken);
     }
 }
