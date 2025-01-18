@@ -15,7 +15,7 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
         await _tasksList.InsertOneAsync(taskList, cancellationToken: cancellationToken);
     }
 
-    public async Task DeleteAsync(string taskListId, string userId, CancellationToken cancellationToken)
+    public async Task DeleteAsync(string taskListId, string userId, CancellationToken cancellationToken = default)
     {
         var filterBuilder = Builders<TaskList>.Filter;
 
@@ -25,7 +25,7 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
         await _tasksList.DeleteOneAsync(filter, cancellationToken);
     }
 
-    public async Task<IEnumerable<TaskList>?> GetAllAsync(string userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TaskList>?> GetAllAsync(string userId, CancellationToken cancellationToken = default)
     {
         var filterBuilder = Builders<TaskList>.Filter;
 
@@ -37,7 +37,7 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<TaskList?> GetByIdAsync(string taskListId, string userId, CancellationToken cancellationToken)
+    public async Task<TaskList?> GetByIdAsync(string taskListId, string userId, CancellationToken cancellationToken = default)
     {
         var filterBuilder = Builders<TaskList>.Filter;
 
@@ -48,7 +48,7 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
         return await _tasksList.Find(filter).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<TaskList?> UpdateAsync(TaskList taskList, string userId, CancellationToken cancellationToken)
+    public async Task<TaskList?> UpdateAsync(TaskList taskList, string userId, CancellationToken cancellationToken = default)
     {
         var filterBuilder = Builders<TaskList>.Filter;
         var updateBuilder = Builders<TaskList>.Update;
@@ -66,13 +66,46 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
         return await _tasksList.FindOneAndUpdateAsync(filter, update, options, cancellationToken);
     }
 
+    public async Task<TaskList?> AddUserToTaskListAsync(string taskListId, string userToAddId, string ownerId, CancellationToken cancellationToken = default)
+    {
+        var update = Builders<TaskList>.Update.AddToSet(x => x.AccessibleUserIds, userToAddId);
+        return await UpdateTaskListUsersAsync(taskListId, ownerId, update, cancellationToken);
+    }
+
+    public async Task<TaskList?> RemoveUserFromTaskListAsync(string taskListId, string userToDeleteId, string ownerId, CancellationToken cancellationToken = default)
+    {
+        var update = Builders<TaskList>.Update.Pull(x => x.AccessibleUserIds, userToDeleteId);
+        return await UpdateTaskListUsersAsync(taskListId, ownerId, update, cancellationToken);
+    }
+
+    private async Task<TaskList?> UpdateTaskListUsersAsync(
+    string taskListId,
+    string ownerId,
+    UpdateDefinition<TaskList> updateDefinition,
+    CancellationToken cancellationToken = default)
+    {
+        var filterBuilder = Builders<TaskList>.Filter;
+
+        var filter = filterBuilder.Eq(x => x.Id, taskListId) &
+                     (filterBuilder.Eq(x => x.OwnerId, ownerId) |
+                      filterBuilder.AnyEq(x => x.AccessibleUserIds, ownerId));
+
+        var options = new FindOneAndUpdateOptions<TaskList>
+        {
+            ReturnDocument = ReturnDocument.After
+        };
+
+        return await _tasksList.FindOneAndUpdateAsync(filter, updateDefinition, options, cancellationToken);
+    }
+
     private UpdateDefinition<TaskList> GetUpdateDefinitionForTaskList(UpdateDefinitionBuilder<TaskList> updateBuilder, TaskList taskList)
     {
         var updates = new List<UpdateDefinition<TaskList>>
         {
             updateBuilder.Set(x => x.Name, taskList.Name),
-            updateBuilder.Set(x => x.AccessibleUserIds, taskList.AccessibleUserIds)
+            updateBuilder.Set(x => x.Tasks, taskList.Tasks)
         };
+
         return updateBuilder.Combine(updates);
     }
 }

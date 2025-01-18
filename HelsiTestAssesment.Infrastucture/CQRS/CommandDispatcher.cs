@@ -12,7 +12,7 @@ public class CommandDispatcher
         _serviceProvider = serviceProvider;
     }
 
-    public async Task DispatchAsync<TCommand>(TCommand command) where TCommand : ICommand
+    public async Task DispatchAsync<TCommand>(TCommand command, CancellationToken cancellationToken) where TCommand : ICommand
     {
         var handler = _serviceProvider.GetRequiredService<ICommandHandler<TCommand>>();
 
@@ -21,6 +21,6 @@ public class CommandDispatcher
             throw new InvalidOperationException($"Handler for query {typeof(TCommand).Name} not found.");
         }
 
-        await handler.Handle(command);
+        await handler.Handle(command, cancellationToken);
     }
 }

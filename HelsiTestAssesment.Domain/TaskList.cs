@@ -14,6 +14,8 @@ public class TaskList
 
     public string OwnerId { get; set; } = default!;
 
+    public IEnumerable<string>? Tasks { get; set; }
+
     public IEnumerable<string>? AccessibleUserIds { get; set; }
 
     public DateTime CreatedAt { get; set; }
