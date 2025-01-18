@@ -12,7 +12,7 @@ public class QueryDispatcher
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>
+    public async Task<TResult> DispatchAsync<TQuery, TResult>(TQuery query, CancellationToken cancellationToken) where TQuery : IQuery<TResult>
     {
         var handler = _serviceProvider.GetService<IQueryHandler<TQuery, TResult>>();
 
@@ -22,6 +22,6 @@ public class QueryDispatcher
         }
             
 
-        return await handler.Handle(query);
+        return await handler.Handle(query, cancellationToken);
     }
 }

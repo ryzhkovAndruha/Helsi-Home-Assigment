@@ -37,6 +37,19 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<string>?> GetAccesibleUsers(string taskListId, string userId, CancellationToken cancellationToken = default)
+    {
+        var filterBuilder = Builders<TaskList>.Filter;
+
+        var filter = filterBuilder.Eq(x => x.Id, taskListId) &
+                     (filterBuilder.Eq(x => x.OwnerId, userId) |
+                      filterBuilder.AnyEq(x => x.AccessibleUserIds, userId));
+
+        return await _tasksList.Find(filter)
+            .Project(x => x.AccessibleUserIds)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
     public async Task<TaskList?> GetByIdAsync(string taskListId, string userId, CancellationToken cancellationToken = default)
     {
         var filterBuilder = Builders<TaskList>.Filter;

@@ -11,4 +11,5 @@ public interface ITaskListRepository
     Task DeleteAsync(string taskListId, string userId, CancellationToken cancellationToken = default);
     Task<TaskList?> AddUserToTaskListAsync(string taskListId, string userToAddId, string ownerId, CancellationToken cancellationToken = default);
     Task<TaskList?> RemoveUserFromTaskListAsync(string taskListId, string userToDeleteId, string ownerId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<string>?> GetAccesibleUsers(string taskListId, string userId, CancellationToken cancellationToken = default);
 }
