@@ -1,4 +1,5 @@
-﻿using HelsiTestAssesment.Application.DTOs;
+﻿using FluentValidation;
+using HelsiTestAssesment.Application.DTOs;
 using HelsiTestAssesment.Application.Handlers.Commands;
 using HelsiTestAssesment.Application.Handlers.Queries;
 using HelsiTestAssesment.Domain;
@@ -9,7 +10,11 @@ namespace HelsiTestAssessment.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class TaskListController(CommandDispatcher commandDispatcher, QueryDispatcher queryDispatcher) : ControllerBase
+public class TaskListController(CommandDispatcher commandDispatcher, 
+    QueryDispatcher queryDispatcher,
+    IValidator<CreateTaskListDto> createTaskListValidator,
+    IValidator<UpdateTaskListDto> updateTaskListValidator,
+    IValidator<UpdateTaskListUsersDto> updateUsersTaskListValidator) : ControllerBase
 {
     [HttpGet("task-lists/{id}")]
     [ProducesResponseType(200)]
@@ -66,8 +71,14 @@ public class TaskListController(CommandDispatcher commandDispatcher, QueryDispat
     [HttpPost("task-lists")]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> Create(CreateTaskListDto createTaskListDto, string userId)
+    public async Task<IActionResult> Create([FromBody]CreateTaskListDto createTaskListDto, string userId)
     {
+        var validationResult = await createTaskListValidator.ValidateAsync(createTaskListDto);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
         var command = new AddTaskListCommand(createTaskListDto, userId);
         var result = await commandDispatcher.DispatchAsync(command);
         var taskList = result.Data as TaskList;
@@ -80,6 +91,12 @@ public class TaskListController(CommandDispatcher commandDispatcher, QueryDispat
     [ProducesResponseType(500)]
     public async Task<IActionResult> Update(string id, [FromBody]UpdateTaskListDto updateTaskListDto, string userId)
     {
+        var validationResult = await updateTaskListValidator.ValidateAsync(updateTaskListDto);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
         var command = new UpdateTaskListCommand(id, updateTaskListDto, userId);
         var result = await commandDispatcher.DispatchAsync(command);
 
@@ -94,8 +111,14 @@ public class TaskListController(CommandDispatcher commandDispatcher, QueryDispat
     [HttpPatch("task-lists/{id}/users")]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> UpdateUserInTaskList(string id, UpdateTaskListUsersDto updateTaskListUsersDto, string userId)
+    public async Task<IActionResult> UpdateUserInTaskList(string id, [FromBody]UpdateTaskListUsersDto updateTaskListUsersDto, string userId)
     {
+        var validationResult = await updateUsersTaskListValidator.ValidateAsync(updateTaskListUsersDto);
+        if (!validationResult.IsValid)
+        {
+            return BadRequest(validationResult.Errors);
+        }
+
         var result = true;
 
         if (updateTaskListUsersDto.UserToAdd != null)
