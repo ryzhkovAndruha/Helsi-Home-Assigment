@@ -32,12 +32,12 @@ public class TaskListController(CommandDispatcher commandDispatcher, QueryDispat
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> GetAll(string userId)
+    public async Task<IActionResult> GetAll(string userId, int page = 1, int pageSize = 10)
     {
-        var query = new GetTaskListsQuery(userId);
-        var taskList = await queryDispatcher.DispatchAsync<GetTaskListsQuery, IEnumerable<TaskList>?>(query);
+        var query = new GetTaskListsQuery(userId, page, pageSize);
+        var taskList = await queryDispatcher.DispatchAsync<GetTaskListsQuery, PaginatedResult<TaskList>?>(query);
 
-        if (taskList == null)
+        if (taskList == null || !taskList.Items.Any())
         {
             return NotFound($"No task lists found for user {userId}");
         }
