@@ -4,7 +4,7 @@ using HelsiTestAssesment.Application.DTOs;
 
 namespace HelsiTestAssesment.Application.Handlers.Commands;
 
-internal class RemoveUserFromTaskListCommandHandler(ITaskListRepository taskListRepository) : ICommandHandler<RemoveUserFromTaskListCommand>
+public class RemoveUserFromTaskListCommandHandler(ITaskListRepository taskListRepository) : ICommandHandler<RemoveUserFromTaskListCommand>
 {
     public async Task<CommandOperationResultDto> Handle(RemoveUserFromTaskListCommand command, CancellationToken cancellationToken)
     {

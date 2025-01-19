@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelsiTestAssesment.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelsiTestAssesment.Infrastucture", "HelsiTestAssesment.Infrastucture\HelsiTestAssesment.Infrastucture.csproj", "{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelsiTestAssesment.Tests", "HelsiTestAssesment.Tests\HelsiTestAssesment.Tests.csproj", "{941DE1CB-6906-4B90-9220-BF793B9C435C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A440D11C-57C8-4B4B-9DD7-44FFB99C5D4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{941DE1CB-6906-4B90-9220-BF793B9C435C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{941DE1CB-6906-4B90-9220-BF793B9C435C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{941DE1CB-6906-4B90-9220-BF793B9C435C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{941DE1CB-6906-4B90-9220-BF793B9C435C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
