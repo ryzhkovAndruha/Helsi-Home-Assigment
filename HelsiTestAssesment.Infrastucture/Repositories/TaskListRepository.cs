@@ -15,14 +15,16 @@ public class TaskListRepository(MongoDbContext context) : ITaskListRepository
         await _tasksList.InsertOneAsync(taskList, cancellationToken: cancellationToken);
     }
 
-    public async Task DeleteAsync(string taskListId, string userId, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteAsync(string taskListId, string userId, CancellationToken cancellationToken = default)
     {
         var filterBuilder = Builders<TaskList>.Filter;
 
         var filter = filterBuilder.Eq(x => x.Id, taskListId) &
                      filterBuilder.Eq(x => x.OwnerId, userId);
 
-        await _tasksList.DeleteOneAsync(filter, cancellationToken);
+        var result = await _tasksList.DeleteOneAsync(filter, cancellationToken);
+
+        return result.DeletedCount > 0;
     }
 
     public async Task<IEnumerable<TaskList>?> GetAllAsync(string userId, CancellationToken cancellationToken = default)

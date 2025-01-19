@@ -11,7 +11,7 @@ namespace HelsiTestAssessment.Controllers;
 [ApiController]
 public class TaskListController(CommandDispatcher commandDispatcher, QueryDispatcher queryDispatcher) : ControllerBase
 {
-    [HttpGet("task-list/{id}")]
+    [HttpGet("task-lists/{id}")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -22,13 +22,13 @@ public class TaskListController(CommandDispatcher commandDispatcher, QueryDispat
 
         if (taskList == null)
         {
-            return NotFound();
+            return NotFound($"Task list with id {id} is not found for user {userId}");
         }
 
         return Ok(taskList);
     }
 
-    [HttpGet("task-lists/all")]
+    [HttpGet("task-lists")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
@@ -39,7 +39,7 @@ public class TaskListController(CommandDispatcher commandDispatcher, QueryDispat
 
         if (taskList == null)
         {
-            return NotFound();
+            return NotFound($"No task lists found for user {userId}");
         }
 
         return Ok(taskList);
@@ -49,71 +49,87 @@ public class TaskListController(CommandDispatcher commandDispatcher, QueryDispat
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> GetUsers(string taskListId, string userId)
+    public async Task<IActionResult> GetUsers(string id, string userId)
     {
-        var query = new GetAccesibleUsersQuery(taskListId, userId);
-        var taskList = await queryDispatcher.DispatchAsync<GetAccesibleUsersQuery, IEnumerable<string>?>(query);
+        var query = new GetAccesibleUsersQuery(id, userId);
+        var accesibleUsers = await queryDispatcher.DispatchAsync<GetAccesibleUsersQuery, IEnumerable<string>?>(query);
 
-        if (taskList == null)
+        if (accesibleUsers == null 
+            || accesibleUsers.Count() == 0)
         {
-            return NotFound();
+            return NotFound($"No accessible users found for tsak list {id}");
         }
 
-        return Ok(taskList);
+        return Ok(accesibleUsers);
     }
 
-    [HttpPost("task-list")]
+    [HttpPost("task-lists")]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
     public async Task<IActionResult> Create(CreateTaskListDto createTaskListDto, string userId)
     {
         var command = new AddTaskListCommand(createTaskListDto, userId);
-        await commandDispatcher.DispatchAsync(command);
+        var result = await commandDispatcher.DispatchAsync(command);
+        var taskList = result.Data as TaskList;
 
-        return Created();
+        return CreatedAtAction(nameof(GetById), new { id = taskList?.Id }, taskList);
     }
 
-    [HttpPut("task-list")]
+    [HttpPut("task-lists/{id}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> Update(UpdateTaskListDto updateTaskListDto, string userId)
+    public async Task<IActionResult> Update(string id, [FromBody]UpdateTaskListDto updateTaskListDto, string userId)
     {
-        var command = new UpdateTaskListCommand(updateTaskListDto, userId);
-        await commandDispatcher.DispatchAsync(command);
+        var command = new UpdateTaskListCommand(id, updateTaskListDto, userId);
+        var result = await commandDispatcher.DispatchAsync(command);
 
-        return Ok();
+        if (!result.Success)
+        {
+            return NotFound(result.ErrorMessage);
+        }
+
+        return Ok(result.Data);
     }
 
-    [HttpPatch("task-list/{taskListId}/users/add")]
+    [HttpPatch("task-lists/{id}/users")]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> AddUserToTaskList(string taskListId, string userToAddId, string userId)
+    public async Task<IActionResult> UpdateUserInTaskList(string id, UpdateTaskListUsersDto updateTaskListUsersDto, string userId)
     {
-        var command = new AddUserToTaskListCommand(taskListId, userToAddId, userId);
-        await commandDispatcher.DispatchAsync(command);
+        var result = true;
 
-        return Ok();
+        if (updateTaskListUsersDto.UserToAdd != null)
+        {
+            var addCommand = new AddUserToTaskListCommand(id, updateTaskListUsersDto.UserToAdd, userId);
+            result &= (await commandDispatcher.DispatchAsync(addCommand)).Success;
+        }
+        if (updateTaskListUsersDto.UserToRemove != null)
+        {
+            var removeCommand = new RemoveUserFromTaskListCommand(id, updateTaskListUsersDto.UserToRemove, userId);
+            result &= (await commandDispatcher.DispatchAsync(removeCommand)).Success;
+        }
+
+        if (!result)
+        {
+            return NotFound($"Unable to find task list with id {id}");
+        }
+
+        return NoContent();
     }
 
-    [HttpPatch("task-list/{taskListId}/users/remove")]
+    [HttpDelete("task-lists/{id}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(500)]
-    public async Task<IActionResult> RemoveUserFromTaskList(string taskListId, string userToRemoveId, string userId)
+    public async Task<IActionResult> DeleteTaskList(string id, string userId)
     {
-        var command = new RemoveUserFromTaskListCommand(taskListId, userToRemoveId, userId);
-        await commandDispatcher.DispatchAsync(command);
+        var command = new DeleteTaskListCommand(id, userId);
+        var result = await commandDispatcher.DispatchAsync(command);
 
-        return Ok();
-    }
+        if (!result.Success)
+        {
+            return NotFound(result.ErrorMessage);
+        }
 
-    [HttpDelete("task-list")]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(500)]
-    public async Task<IActionResult> DeleteTaskList(string taskListId, string userId)
-    {
-        var command = new DeleteTaskListCommand(taskListId, userId);
-        await commandDispatcher.DispatchAsync(command);
-
-        return Ok();
+        return NoContent();
     }
 }

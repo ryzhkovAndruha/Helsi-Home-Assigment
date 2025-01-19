@@ -2,4 +2,4 @@
 
 namespace HelsiTestAssesment.Application.Handlers.Commands;
 
-public record class RemoveUserFromTaskListCommand(string TaskListId, string UserToAdd, string UserId) : ICommand;
+public record class RemoveUserFromTaskListCommand(string TaskListId, string UserToRemove, string UserId) : ICommand;
