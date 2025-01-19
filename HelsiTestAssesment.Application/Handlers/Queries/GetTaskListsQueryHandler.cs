@@ -1,13 +1,14 @@
-﻿using HelsiTestAssesment.Application.Core.Interfaces;
+﻿using AutoMapper;
+using HelsiTestAssesment.Application.Core.Interfaces;
 using HelsiTestAssesment.Application.Core.Interfaces.CQRS;
 using HelsiTestAssesment.Application.DTOs;
 using HelsiTestAssesment.Domain;
 
 namespace HelsiTestAssesment.Application.Handlers.Queries;
 
-public class GetTaskListsQueryHandler(ITaskListRepository taskListRepository) : IQueryHandler<GetTaskListsQuery, PaginatedResult<TaskList>?>
+public class GetTaskListsQueryHandler(ITaskListRepository taskListRepository, IMapper mapper) : IQueryHandler<GetTaskListsQuery, PaginatedResult<GetAllTaskListsDto>?>
 {
-    public async Task<PaginatedResult<TaskList>?> Handle(GetTaskListsQuery query, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<GetAllTaskListsDto>?> Handle(GetTaskListsQuery query, CancellationToken cancellationToken)
     {
         var taskLists = await taskListRepository.GetAllAsync(query.UserId, cancellationToken);
 
@@ -23,9 +24,9 @@ public class GetTaskListsQueryHandler(ITaskListRepository taskListRepository) : 
             .Take(query.PageSize)
             .ToList();
 
-        return new PaginatedResult<TaskList>
+        return new PaginatedResult<GetAllTaskListsDto>
         {
-            Items = pagedItems,
+            Items = mapper.Map<IEnumerable<GetAllTaskListsDto>>(pagedItems),
             TotalCount = totalCount,
             Page = query.Page,
             PageSize = query.PageSize

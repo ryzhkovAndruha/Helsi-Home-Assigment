@@ -22,7 +22,7 @@ public class AddUserToTaskListCommandHandler(ITaskListRepository taskListReposit
 
         return new CommandOperationResultDto
         {
-            Success = false,
+            Success = true,
             Data = taskList
         };
 

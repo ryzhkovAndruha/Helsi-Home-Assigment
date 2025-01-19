@@ -22,7 +22,7 @@ internal class RemoveUserFromTaskListCommandHandler(ITaskListRepository taskList
 
         return new CommandOperationResultDto
         {
-            Success = false,
+            Success = true,
             Data = taskList
         };
     }

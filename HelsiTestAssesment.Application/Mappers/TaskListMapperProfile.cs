@@ -9,5 +9,7 @@ public class TaskListMapperProfile: Profile
     public TaskListMapperProfile()
     {
         CreateMap<CreateTaskListDto, TaskList>();
+        CreateMap<UpdateTaskListDto, TaskList>();
+        CreateMap<TaskList, GetAllTaskListsDto>();
     }
 }

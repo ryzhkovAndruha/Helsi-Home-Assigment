@@ -4,4 +4,4 @@ using HelsiTestAssesment.Domain;
 
 namespace HelsiTestAssesment.Application.Handlers.Queries;
 
-public record class GetTaskListsQuery(string UserId, int Page, int PageSize) : IQuery<PaginatedResult<TaskList>?>;
+public record class GetTaskListsQuery(string UserId, int Page, int PageSize) : IQuery<PaginatedResult<GetAllTaskListsDto>?>;

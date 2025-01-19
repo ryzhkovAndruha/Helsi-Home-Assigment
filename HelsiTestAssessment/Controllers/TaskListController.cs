@@ -40,7 +40,7 @@ public class TaskListController(CommandDispatcher commandDispatcher,
     public async Task<IActionResult> GetAll(string userId, int page = 1, int pageSize = 10)
     {
         var query = new GetTaskListsQuery(userId, page, pageSize);
-        var taskList = await queryDispatcher.DispatchAsync<GetTaskListsQuery, PaginatedResult<TaskList>?>(query);
+        var taskList = await queryDispatcher.DispatchAsync<GetTaskListsQuery, PaginatedResult<GetAllTaskListsDto>?>(query);
 
         if (taskList == null || !taskList.Items.Any())
         {

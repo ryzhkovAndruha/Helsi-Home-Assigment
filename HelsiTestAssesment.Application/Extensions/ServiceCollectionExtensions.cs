@@ -21,7 +21,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IQueryHandler<GetAccesibleUsersQuery, IEnumerable<string>?>, GetAccesibleUsersQueryHandler>();
         services.AddScoped<IQueryHandler<GetTaskListByIdQuery, TaskList?>, GetTaskListByIdQueryHandler>();
-        services.AddScoped<IQueryHandler<GetTaskListsQuery, PaginatedResult<TaskList>?>, GetTaskListsQueryHandler>();
+        services.AddScoped<IQueryHandler<GetTaskListsQuery, PaginatedResult<GetAllTaskListsDto>?>, GetTaskListsQueryHandler>();
 
         return services;
     }
