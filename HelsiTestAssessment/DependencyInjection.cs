@@ -1,5 +1,6 @@
 ﻿using HelsiTestAssesment.Infrastucture.Extensions;
-using HelsiTestAssesment.Application.Extensions; 
+using HelsiTestAssesment.Application.Extensions;
+using HelsiTestAssessment.Extensions;
 
 namespace HelsiTestAssessment;
 
@@ -9,6 +10,7 @@ public static class DependencyInjection
     {
         services
             .AddAutoMapper(typeof(Program).Assembly)
+            .AddValidation()
             .AddMongoDbServices(configuration)
             .AddApplicationServices()
             .AddInfrastructureServices();
